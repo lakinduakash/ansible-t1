@@ -7,8 +7,20 @@
     apt:
            name: apache2
            state: latest
-    become_user: root
+  - name: ensure git installed
+    apt:
+            name: git
+            state: latest
   - name: ensure apache is running
     service:
             name: apache2
             state: started 
+  - name: clone repo
+    command: git clone https://github.com/lakinduakash/ansible-t1
+    ignore_errors: True
+  - name: fetch updates
+    command: cd ansible-t1; git pull origin master  
+  - name: copy index.html
+    command: cp -fp ansible-t1/index.html /var/www/html/index.html
+    notify:
+            - restart apache2 
