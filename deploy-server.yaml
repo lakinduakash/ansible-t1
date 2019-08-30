@@ -19,8 +19,13 @@
     command: git clone https://github.com/lakinduakash/ansible-t1
     ignore_errors: True
   - name: fetch updates
-    command: cd ansible-t1; git pull origin master  
+    shell: chdir=/home/lakinduakash/ansible-t1 git pull origin master  
   - name: copy index.html
     command: cp -fp ansible-t1/index.html /var/www/html/index.html
     notify:
-            - restart apache2 
+            - restart apache
+  handlers:
+            - name: restart apache
+              service:
+                      name: apache22
+                      state: restarted
